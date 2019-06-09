@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(Metronome());
 
-class MyApp extends StatelessWidget {
+class Metronome extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'metri:beat',
       theme: ThemeData(
         // This is the theme of your application.
         //
