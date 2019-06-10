@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:metronome/blocs/counter/counter_event.dart';
-import 'package:metronome/blocs/counter/counter_state.dart';
+import 'package:metronome/src/blocs/counter/counter_event.dart';
+import 'package:metronome/src/blocs/counter/counter_state.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
