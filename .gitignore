@@ -10,8 +10,8 @@
 .svn/
 
 # Security related
-/**/android/**/google-services.json
-/**/ios/**/GoogleService-Info.plist
+**/android/**/google-services.json
+**/ios/**/GoogleService-Info.plist
 
 
 # IntelliJ related
