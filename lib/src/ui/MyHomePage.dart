@@ -27,9 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new BlocProvider(
-        bloc: _counterBloc,
-        child: CounterWidget(widget: widget)
-    );
+        bloc: _counterBloc, child: CounterWidget(widget: widget));
   }
 
   @override

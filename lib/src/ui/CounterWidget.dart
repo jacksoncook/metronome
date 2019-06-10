@@ -23,33 +23,33 @@ class CounterWidget extends StatelessWidget {
         body: BlocBuilder(
             bloc: BlocProvider.of<CounterBloc>(context),
             builder: (context, CounterState state) {
-              return
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'You have pushed the button this many times:',
-                      ),
-                      Text(
-                        '${state.counter}',
-                        style: Theme.of(context).textTheme.display1,
-                      ),
-                    ],
-                  ),
-                );
-            }
-        ),
-        floatingActionButton: Row(mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[FloatingActionButton(
-                onPressed: () => BlocProvider.of<CounterBloc>(context).onIncrement(),
-                tooltip: 'Increment',
-                child: Icon(Icons.add)),
-              FloatingActionButton(
-                  onPressed: () => BlocProvider.of<CounterBloc>(context).onDecrement(),
-                  tooltip: 'Decrement',
-                  child: Icon(Icons.remove)
-              )]
-        ));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'You have pushed the button this many times:',
+                    ),
+                    Text(
+                      '${state.counter}',
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                  ],
+                ),
+              );
+            }),
+        floatingActionButton:
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+          FloatingActionButton(
+              onPressed: () =>
+                  BlocProvider.of<CounterBloc>(context).onIncrement(),
+              tooltip: 'Increment',
+              child: Icon(Icons.add)),
+          FloatingActionButton(
+              onPressed: () =>
+                  BlocProvider.of<CounterBloc>(context).onDecrement(),
+              tooltip: 'Decrement',
+              child: Icon(Icons.remove))
+        ]));
   }
 }
