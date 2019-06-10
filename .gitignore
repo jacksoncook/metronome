@@ -9,6 +9,11 @@
 .history
 .svn/
 
+# Security related
+/**/android/**/google-services.json
+/**/ios/**/GoogleService-Info.plist
+
+
 # IntelliJ related
 *.iml
 *.ipr
