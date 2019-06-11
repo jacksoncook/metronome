@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:metronome/src/blocs/counter/counter_event.dart';
-import 'package:metronome/src/blocs/counter/counter_state.dart';
+import 'package:metronome/blocs/counter/counter_event.dart';
+import 'package:metronome/blocs/counter/counter_state.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-
   void onIncrement() {
     this.dispatch(new IncrementEvent());
   }
@@ -16,7 +15,9 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   CounterState get initialState => CounterState.initial();
 
   @override
-  Stream<CounterState> mapEventToState(CounterEvent event,) async* {
+  Stream<CounterState> mapEventToState(
+    CounterEvent event,
+  ) async* {
     final _currentState = currentState;
     if (event is IncrementEvent) {
       yield CounterState(counter: _currentState.counter + 1);

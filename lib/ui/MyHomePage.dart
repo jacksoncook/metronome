@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:metronome/src/blocs/counter/counter_bloc.dart';
-import 'package:metronome/src/ui/CounterWidget.dart';
+import 'package:metronome/blocs/counter/counter_bloc.dart';
+import 'package:metronome/ui/CounterWidget.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:metronome/src/ui/MyHomePage.dart';
+import 'package:metronome/ui/MyHomePage.dart';
 
 class Metronome extends StatelessWidget {
   // This widget is the root of your application.
