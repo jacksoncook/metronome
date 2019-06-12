@@ -44,6 +44,8 @@ class _AppState extends State<Metronome> {
             if (state is Authenticated) {
               return MyHomePage(title: 'Flutter Demo Home Page');
             }
+            // Default to login screen if they not in something
+            return LoginScreen(auth: _auth);
           },
         ),
       ),

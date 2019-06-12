@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:metronome/blocs/login/login_event.dart';
 import 'package:metronome/blocs/login/login_state.dart';
 import 'package:metronome/resources/auth.dart';
