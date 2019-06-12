@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:metronome/blocs/counter/counter_bloc.dart';
-import 'package:metronome/ui/CounterWidget.dart';
+import 'package:metronome/blocs/authentication/authentication_event.dart';
+import 'package:metronome/blocs/authentication/authentication_bloc.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+class MyHomePage extends StatelessWidget {
   final String title;
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final _counterBloc = new CounterBloc();
+  MyHomePage({Key key, @required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new BlocProvider(
-        bloc: _counterBloc, child: CounterWidget(widget: widget));
-  }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('metri.beat'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              BlocProvider.of<AuthenticationBloc>(context).dispatch(
+                LoggedOut(),
+              );
+            },
+          )
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(child: Text('Heyo!')),
+        ],
+      ),
+    );
   }
 }
