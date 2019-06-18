@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/ui/register/RegisterScreen.dart';
 
 class CreateAccountButton extends StatelessWidget {
-  final Auth _auth;
+  final Repository _repository;
 
-  CreateAccountButton({Key key, @required Auth auth})
-      : assert(auth != null),
-        _auth = auth,
+  CreateAccountButton({
+    Key key,
+    @required Repository repository,
+  })  : assert(repository != null),
+        _repository = repository,
         super(key: key);
 
   @override
@@ -19,7 +21,9 @@ class CreateAccountButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) {
-            return RegisterScreen(auth: _auth);
+            return RegisterScreen(
+              repository: _repository,
+            );
           }),
         );
       },

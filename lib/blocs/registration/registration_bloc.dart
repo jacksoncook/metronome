@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/blocs/registration/registration_event.dart';
 import 'package:metronome/blocs/registration/registration_state.dart';
 import 'package:metronome/resources/form_validators.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final Auth _auth;
+  final Repository _repository;
 
-  RegisterBloc({@required Auth auth})
-      : assert(auth != null),
-        _auth = auth;
+  RegisterBloc({
+    @required Repository repository,
+  })  : assert(repository != null),
+        _repository = repository;
 
   @override
   RegisterState get initialState => RegisterState.empty();
@@ -41,16 +42,25 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
   }
 
+  // Performs registration action
+  // TODO: Currently, if registration with FirebaseAuth works
+  // but the load to Cloud Firestore fails, this method introduces
+  // a situation where a user would be registered with FirebaseAuth
+  // but does not have a user account in Cloud Firestore
   Stream<RegisterState> _mapFormSubmittedToState(
     String email,
     String password,
   ) async* {
     yield RegisterState.loading();
     try {
-      await _auth.register(
+      await _repository.register(
         email,
         password,
       );
+      // await _repository.createUser(
+      //   email,
+      //   'Steve',
+      // );
       yield RegisterState.success();
     } catch (_) {
       yield RegisterState.failure();

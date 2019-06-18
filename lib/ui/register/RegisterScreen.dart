@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/blocs/registration/registration_bloc.dart';
 import 'package:metronome/ui/register/RegisterForm.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final Auth _auth;
+  final Repository _repository;
 
-  RegisterScreen({Key key, @required Auth auth})
-      : assert(auth != null),
-        _auth = auth,
+  RegisterScreen({
+    Key key,
+    @required Repository repository,
+  })  : assert(repository != null),
+        _repository = repository,
         super(key: key);
 
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -22,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
     _registerBloc = RegisterBloc(
-      auth: widget._auth,
+      repository: widget._repository,
     );
   }
 

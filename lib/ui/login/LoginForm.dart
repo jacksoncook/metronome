@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/blocs/login/login_bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_event.dart';
@@ -10,11 +10,11 @@ import 'package:metronome/ui/login/LoginButton.dart';
 import 'package:metronome/ui/login/CreateAccountButton.dart';
 
 class LoginForm extends StatefulWidget {
-  final Auth _auth;
+  final Repository _repository;
 
-  LoginForm({Key key, @required Auth auth})
-      : assert(auth != null),
-        _auth = auth,
+  LoginForm({Key key, @required Repository repository})
+      : assert(repository != null),
+        _repository = repository,
         super(key: key);
 
   State<LoginForm> createState() => _LoginFormState();
@@ -26,7 +26,7 @@ class _LoginFormState extends State<LoginForm> {
 
   LoginBloc _loginBloc;
 
-  Auth get _auth => widget._auth;
+  Repository get _repository => widget._repository;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -136,7 +136,7 @@ class _LoginFormState extends State<LoginForm> {
                               ? _onFormSubmitted
                               : null,
                         ),
-                        CreateAccountButton(auth: _auth),
+                        CreateAccountButton(repository: _repository),
                       ],
                     ),
                   ),

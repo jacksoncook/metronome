@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/blocs/authentication/authentication_bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_event.dart';
 import 'package:metronome/blocs/authentication/authentication_state.dart';
@@ -13,13 +13,13 @@ class Metronome extends StatefulWidget {
 }
 
 class _AppState extends State<Metronome> {
-  final Auth _auth = Auth();
+  final Repository _repository = Repository();
   AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
     super.initState();
-    _authenticationBloc = AuthenticationBloc(auth: _auth);
+    _authenticationBloc = AuthenticationBloc(repository: _repository);
     _authenticationBloc.dispatch(AppStarted());
   }
 
@@ -39,13 +39,13 @@ class _AppState extends State<Metronome> {
               return WelcomeScreen();
             }
             if (state is Unauthenticated) {
-              return LoginScreen(auth: _auth);
+              return LoginScreen(repository: _repository);
             }
             if (state is Authenticated) {
               return MyHomePage(title: 'Flutter Demo Home Page');
             }
             // Default to login screen if they not in something
-            return LoginScreen(auth: _auth);
+            return LoginScreen(repository: _repository);
           },
         ),
       ),

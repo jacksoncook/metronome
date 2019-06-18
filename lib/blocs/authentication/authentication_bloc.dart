@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_event.dart';
 import 'package:metronome/blocs/authentication/authentication_state.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:meta/meta.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final Auth _auth;
+  final Repository _repository;
 
-  AuthenticationBloc({@required Auth auth})
-      : assert(auth != null),
-        _auth = auth;
+  AuthenticationBloc({@required Repository repository})
+      : assert(repository != null),
+        _repository = repository;
 
   @override
   AuthenticationState get initialState => Uninitialized();
@@ -30,7 +30,7 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     try {
-      final isSignedIn = await _auth.isSignedIn();
+      final isSignedIn = await _repository.isSignedIn();
       if (isSignedIn) {
         yield Authenticated();
       } else {
@@ -47,6 +47,6 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
-    _auth.signOut();
+    _repository.signOut();
   }
 }

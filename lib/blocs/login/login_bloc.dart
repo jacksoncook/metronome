@@ -4,16 +4,16 @@ import 'package:meta/meta.dart';
 
 import 'package:metronome/blocs/login/login_event.dart';
 import 'package:metronome/blocs/login/login_state.dart';
-import 'package:metronome/resources/auth.dart';
+import 'package:metronome/resources/repository.dart';
 import 'package:metronome/resources/form_validators.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  Auth _auth;
+  Repository _repository;
 
   LoginBloc({
-    @required Auth auth,
-  })  : assert(auth != null),
-        _auth = auth;
+    @required Repository repository,
+  })  : assert(repository != null),
+        _repository = repository;
 
   @override
   LoginState get initialState => LoginState.empty();
@@ -52,7 +52,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) async* {
     yield LoginState.loading();
     try {
-      await _auth.signIn(
+      await _repository.signIn(
         email,
         password,
       );
