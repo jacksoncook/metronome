@@ -24,9 +24,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (event is EmailChanged) {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is PasswordChanged) {
-      yield* _mapPasswordChangedToState(event.password);
+      yield* _mapPasswordChangedToState(event.password, event.retypePassword);
+    } else if (event is RetypePasswordChanged) {
+      yield* _mapRetypePasswordChangedToState(
+          event.password, event.retypePassword);
     } else if (event is Submitted) {
-      yield* _mapFormSubmittedToState(event.email, event.password);
+      yield* _mapFormSubmittedToState(event.name, event.email, event.password);
     }
   }
 
@@ -36,10 +39,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
   }
 
-  Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
+  Stream<RegisterState> _mapPasswordChangedToState(
+      String password, String retypePassword) async* {
     yield currentState.update(
-      isPasswordValid: FormValidators.isValidPassword(password),
-    );
+        isPasswordValid: FormValidators.isValidPassword(password),
+        doPasswordsMatch: password == retypePassword);
+  }
+
+  Stream<RegisterState> _mapRetypePasswordChangedToState(
+      String password, String retypePassword) async* {
+    yield currentState.update(doPasswordsMatch: password == retypePassword);
   }
 
   // Performs registration action
@@ -48,6 +57,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   // a situation where a user would be registered with FirebaseAuth
   // but does not have a user account in Cloud Firestore
   Stream<RegisterState> _mapFormSubmittedToState(
+    String name,
     String email,
     String password,
   ) async* {
@@ -57,10 +67,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         email,
         password,
       );
-      // await _repository.createUser(
-      //   email,
-      //   'Steve',
-      // );
+      await _repository.createUser(
+        email,
+        name,
+      );
       yield RegisterState.success();
     } catch (_) {
       yield RegisterState.failure();

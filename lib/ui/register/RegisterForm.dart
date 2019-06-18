@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_bloc.dart';
 import 'package:metronome/blocs/authentication/authentication_event.dart';
@@ -12,13 +13,19 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _retypePasswordController =
+      TextEditingController();
 
   RegisterBloc _registerBloc;
 
   bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      _nameController.text.isNotEmpty &&
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _retypePasswordController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(RegisterState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -28,8 +35,10 @@ class _RegisterFormState extends State<RegisterForm> {
   void initState() {
     super.initState();
     _registerBloc = BlocProvider.of<RegisterBloc>(context);
+    _nameController.addListener(_onNameChanged);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
+    _retypePasswordController.addListener(_onRetypePasswordChanged);
   }
 
   @override
@@ -83,6 +92,20 @@ class _RegisterFormState extends State<RegisterForm> {
                 shrinkWrap: true,
                 children: <Widget>[
                   TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.account_circle),
+                      labelText: 'Name',
+                    ),
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !_nameController.text.isNotEmpty
+                          ? 'Enter a name'
+                          : null;
+                    },
+                  ),
+                  TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
@@ -107,6 +130,21 @@ class _RegisterFormState extends State<RegisterForm> {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
                   ),
+                  TextFormField(
+                    controller: _retypePasswordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Retype Password',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.doPasswordsMatch
+                          ? 'Passwords do not match'
+                          : null;
+                    },
+                  ),
                   RegisterButton(
                     onPressed: isRegisterButtonEnabled(state)
                         ? _onFormSubmitted
@@ -128,6 +166,12 @@ class _RegisterFormState extends State<RegisterForm> {
     super.dispose();
   }
 
+  void _onNameChanged() {
+    _registerBloc.dispatch(
+      NameChanged(name: _nameController.text),
+    );
+  }
+
   void _onEmailChanged() {
     _registerBloc.dispatch(
       EmailChanged(email: _emailController.text),
@@ -136,13 +180,26 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void _onPasswordChanged() {
     _registerBloc.dispatch(
-      PasswordChanged(password: _passwordController.text),
+      PasswordChanged(
+        password: _passwordController.text,
+        retypePassword: _retypePasswordController.text,
+      ),
+    );
+  }
+
+  void _onRetypePasswordChanged() {
+    _registerBloc.dispatch(
+      RetypePasswordChanged(
+        password: _passwordController.text,
+        retypePassword: _retypePasswordController.text,
+      ),
     );
   }
 
   void _onFormSubmitted() {
     _registerBloc.dispatch(
       Submitted(
+        name: _nameController.text,
         email: _emailController.text,
         password: _passwordController.text,
       ),

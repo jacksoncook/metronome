@@ -1,22 +1,22 @@
-// import 'firestore_provider.dart';
+import 'firestore_provider.dart';
 import 'auth_provider.dart';
 import 'package:metronome/models/models.dart';
 
 class Repository {
-  // final FirestoreProvider _firestoreProvider = FirestoreProvider();
+  final FirestoreProvider _firestoreProvider = FirestoreProvider();
   final AuthProvider _auth = AuthProvider();
 
   // Cloud Firestore
 
   // Write to Firestore
-  // Future<void> createUser(
-  //   String email,
-  //   String name,
-  // ) =>
-  //     _firestoreProvider.createUser(
-  //       email,
-  //       name,
-  //     );
+  Future<void> createUser(
+    String email,
+    String name,
+  ) =>
+      _firestoreProvider.createUser(
+        email,
+        name,
+      );
 
   // Future<void> createBeat(
   //   String beatName,
