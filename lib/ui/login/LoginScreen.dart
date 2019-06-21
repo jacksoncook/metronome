@@ -7,8 +7,10 @@ import 'package:metronome/ui/login/LoginForm.dart';
 class LoginScreen extends StatefulWidget {
   final Repository _repository;
 
-  LoginScreen({Key key, @required Repository repository})
-      : assert(repository != null),
+  LoginScreen({
+    Key key,
+    @required Repository repository,
+  })  : assert(repository != null),
         _repository = repository,
         super(key: key);
 
