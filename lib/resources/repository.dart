@@ -9,23 +9,21 @@ class Repository {
   // Cloud Firestore
 
   // Write to Firestore
-  Future<void> createUser(
+  Future<void> writeUser(
     String email,
     String name,
   ) =>
-      _firestoreProvider.createUser(
+      _firestoreProvider.writeUser(
         email,
         name,
       );
 
-  // Future<void> createBeat(
-  //   String beatName,
-  //   Beat beat,
-  // ) =>
-  //     _firestoreProvider.createBeat(
-  //       beatName,
-  //       beat,
-  //     );
+  Future<void> writeBeat(
+    Beat beat,
+  ) =>
+      _firestoreProvider.writeBeat(
+        beat,
+      );
 
   // Firebase Authentification methods
   Future<void> register(

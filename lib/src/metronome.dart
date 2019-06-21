@@ -6,6 +6,7 @@ import 'package:metronome/blocs/authentication/authentication_event.dart';
 import 'package:metronome/blocs/authentication/authentication_state.dart';
 import 'package:metronome/ui/MyHomePage.dart';
 import 'package:metronome/ui/WelcomeScreen.dart';
+import 'package:metronome/ui/beat_creation/BeatCreationScreen.dart';
 import 'package:metronome/ui/login/LoginScreen.dart';
 
 class Metronome extends StatefulWidget {
@@ -42,7 +43,7 @@ class _AppState extends State<Metronome> {
               return LoginScreen(repository: _repository);
             }
             if (state is Authenticated) {
-              return MyHomePage(title: 'Flutter Demo Home Page');
+              return BeatCreationScreen(repository: _repository);
             }
             // Default to login screen if they not in something
             return LoginScreen(repository: _repository);
