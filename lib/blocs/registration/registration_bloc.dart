@@ -67,7 +67,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         email,
         password,
       );
-      await _repository.createUser(
+      await _repository.writeUser(
         email,
         name,
       );
