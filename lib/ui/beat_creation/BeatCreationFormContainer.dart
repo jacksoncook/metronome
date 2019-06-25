@@ -36,10 +36,81 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
     _beatNameController.addListener(_onBeatNameChanged);
   }
 
+  bool isUploadButtonEnabled(BeatCreationState state) {
+    return _beatNameController.text.isNotEmpty &&
+        !state.isUploading &&
+        !state.uploaded;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder(
+    return BlocListener(
+      bloc: _beatCreationBloc,
+      listener: (BuildContext context, BeatCreationState state) {
+        if (state.uploadFailed) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text('Upload Failed'), Icon(Icons.error)],
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+        }
+        if (state.isUploading) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Uploading...'),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
+        }
+        if (state.uploaded) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Uploaded Beat!'),
+                  ],
+                ),
+              ),
+            );
+        }
+        if (state.deletedFragment != null) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Deleted beat fragment'),
+                    FlatButton(
+                      child: Text(
+                        'Undo',
+                      ),
+                      onPressed: _onUndoDelete,
+                    )
+                  ],
+                ),
+              ),
+            );
+        }
+      },
+      child: BlocBuilder(
         bloc: _beatCreationBloc,
         builder: (BuildContext context, BeatCreationState state) {
           return Container(
@@ -69,12 +140,13 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
                               beatFragment: state.beat.beatFragments[index],
                               index: index,
                             ),
-                            background: Container(color: Colors.red),
+                            background:
+                                Container(color: Colors.red.withOpacity(0.6)),
                           )
                         : null;
                   }),
               BeatCreationButton(
-                onPressed: _onUploadBeat,
+                onPressed: isUploadButtonEnabled(state) ? _onUploadBeat : null,
               ),
             ]),
           ));
@@ -100,6 +172,12 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
       BeatFragmentDeleted(
         index: index,
       ),
+    );
+  }
+
+  void _onUndoDelete() {
+    _beatCreationBloc.dispatch(
+      UndoBeatFragmentDelete(),
     );
   }
 

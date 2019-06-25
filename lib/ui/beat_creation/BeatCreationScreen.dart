@@ -38,32 +38,36 @@ class _BeatCreationScreenState extends State<BeatCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('metri.beat'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).dispatch(
-                LoggedOut(),
-              );
-            },
-          )
-        ],
-      ),
-      body: BlocBuilder(
-          bloc: _beatCreationBloc,
-          builder: (BuildContext context, BeatCreationState state) {
-            return Container(
-                child: BlocProvider<BeatCreationBloc>(
-              bloc: _beatCreationBloc,
-              child: BeatCreationFormContainer(beatName: state.beat.beatName),
-            ));
-          }),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        _beatCreationBloc.dispatch(BeatFragmentAdded());
-      }),
-    );
+        appBar: AppBar(
+          title: Text('metri.beat'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                BlocProvider.of<AuthenticationBloc>(context).dispatch(
+                  LoggedOut(),
+                );
+              },
+            )
+          ],
+        ),
+        body: BlocBuilder(
+            bloc: _beatCreationBloc,
+            builder: (BuildContext context, BeatCreationState state) {
+              return Container(
+                  child: BlocProvider<BeatCreationBloc>(
+                bloc: _beatCreationBloc,
+                child: BeatCreationFormContainer(beatName: state.beat.beatName),
+              ));
+            }),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _beatCreationBloc.dispatch(
+              BeatFragmentAdded(),
+            );
+          },
+        ));
   }
 
   @override

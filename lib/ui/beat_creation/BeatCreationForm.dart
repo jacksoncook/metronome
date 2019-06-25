@@ -80,6 +80,7 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                     icon: Icon(Icons.lock),
                     labelText: 'Measures',
                   ),
+                  keyboardType: TextInputType.number,
                   autovalidate: true,
                   autocorrect: false,
                   // validator: (_) {

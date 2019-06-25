@@ -51,6 +51,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
       yield* _mapBeatFragmentDeletedToState(
         event.index,
       );
+    } else if (event is UndoBeatFragmentDelete) {
+      yield* _mapUndoBeatFragmentDeleteToState();
     }
   }
 
@@ -59,10 +61,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     Beat newBeat = currentState.beat;
     newBeat.beatName = beatName;
-    yield BeatCreationState(
+    yield currentState.update(
       beat: newBeat,
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -72,13 +72,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
     newBeatFragments[index].bpm = bpm;
-    yield BeatCreationState(
+    yield currentState.update(
       beat: Beat(
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -90,14 +88,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
       timeSignature: "4/4",
       endingType: "END",
     ));
-    yield BeatCreationState(
-      beat: Beat(
-        beatName: currentState.beat.beatName,
-        beatFragments: newBeatFragments,
-      ),
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
-    );
+    yield currentState.update(
+        beat: Beat(
+      beatName: currentState.beat.beatName,
+      beatFragments: newBeatFragments,
+    ));
   }
 
   Stream<BeatCreationState> _mapMeasuresChangedToState(
@@ -106,14 +101,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
     newBeatFragments[index].measures = measures;
-    yield BeatCreationState(
-      beat: Beat(
-        beatName: currentState.beat.beatName,
-        beatFragments: newBeatFragments,
-      ),
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
-    );
+    yield currentState.update(
+        beat: Beat(
+      beatName: currentState.beat.beatName,
+      beatFragments: newBeatFragments,
+    ));
   }
 
   Stream<BeatCreationState> _mapTimeSignatureChangedToState(
@@ -122,14 +114,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
     newBeatFragments[index].timeSignature = timeSignature;
-    yield BeatCreationState(
-      beat: Beat(
-        beatName: currentState.beat.beatName,
-        beatFragments: newBeatFragments,
-      ),
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
-    );
+    yield currentState.update(
+        beat: Beat(
+      beatName: currentState.beat.beatName,
+      beatFragments: newBeatFragments,
+    ));
   }
 
   Stream<BeatCreationState> _mapEndingTypeChangedToState(
@@ -138,41 +127,56 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
     newBeatFragments[index].endingType = endingType;
-    yield BeatCreationState(
-      beat: Beat(
-        beatName: currentState.beat.beatName,
-        beatFragments: newBeatFragments,
-      ),
-      deletedFragment: currentState.deletedFragment,
-      deletedFragmentIndex: currentState.deletedFragmentIndex,
-    );
+    yield currentState.update(
+        beat: Beat(
+      beatName: currentState.beat.beatName,
+      beatFragments: newBeatFragments,
+    ));
   }
 
   Stream<BeatCreationState> _mapUploadBeatPressedToState() async* {
-    // try {
-    await _repository.writeBeat(currentState.beat);
-    // );
-    //   yield LoginState.success();
-    // } catch (_) {
-    //   yield LoginState.failure();
-    // }
+    yield currentState.update(
+      isUploading: true,
+    );
+    try {
+      await _repository.writeBeat(currentState.beat);
+      yield currentState.update(
+        uploaded: true,
+      );
+    } catch (_) {
+      yield currentState.update(
+        uploadFailed: true,
+      );
+    }
   }
 
   Stream<BeatCreationState> _mapBeatFragmentDeletedToState(
     int deletedFragmentIndex,
   ) async* {
     List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
-    print(newBeatFragments);
     BeatFragment deletedFragment =
         newBeatFragments.removeAt(deletedFragmentIndex);
-    print(newBeatFragments);
-    yield BeatCreationState(
+    yield currentState.update(
       beat: Beat(
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
       deletedFragment: deletedFragment,
       deletedFragmentIndex: deletedFragmentIndex,
+    );
+  }
+
+  Stream<BeatCreationState> _mapUndoBeatFragmentDeleteToState() async* {
+    List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
+    newBeatFragments.insert(
+      currentState.deletedFragmentIndex,
+      currentState.deletedFragment,
+    );
+    yield currentState.update(
+      beat: Beat(
+        beatName: currentState.beat.beatName,
+        beatFragments: newBeatFragments,
+      ),
     );
   }
 }

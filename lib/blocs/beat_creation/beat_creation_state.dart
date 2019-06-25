@@ -2,16 +2,21 @@ import 'package:metronome/models/beat.dart';
 import 'package:metronome/models/beat_fragment.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 class BeatCreationState {
   final Beat beat;
   BeatFragment deletedFragment;
   int deletedFragmentIndex;
+  bool isUploading;
+  bool uploadFailed;
+  bool uploaded;
 
   BeatCreationState({
     @required this.beat,
     @required this.deletedFragment,
     @required this.deletedFragmentIndex,
+    @required this.isUploading,
+    @required this.uploadFailed,
+    @required this.uploaded,
   });
 
   factory BeatCreationState.initial() {
@@ -31,6 +36,45 @@ class BeatCreationState {
       ),
       deletedFragment: null,
       deletedFragmentIndex: 0,
+      isUploading: false,
+      uploadFailed: false,
+      uploaded: false,
+    );
+  }
+
+  BeatCreationState update({
+    Beat beat,
+    BeatFragment deletedFragment,
+    int deletedFragmentIndex,
+    bool isUploading,
+    bool uploadFailed,
+    bool uploaded,
+  }) {
+    return copyWith(
+      beat: beat,
+      deletedFragment: deletedFragment,
+      deletedFragmentIndex: deletedFragmentIndex,
+      isUploading: isUploading,
+      uploadFailed: uploadFailed,
+      uploaded: uploaded,
+    );
+  }
+
+  BeatCreationState copyWith({
+    Beat beat,
+    BeatFragment deletedFragment,
+    int deletedFragmentIndex,
+    bool isUploading,
+    bool uploadFailed,
+    bool uploaded,
+  }) {
+    return BeatCreationState(
+      beat: beat ?? this.beat,
+      deletedFragment: deletedFragment ?? null,
+      deletedFragmentIndex: deletedFragmentIndex ?? 0,
+      isUploading: isUploading ?? false,
+      uploadFailed: uploadFailed ?? false,
+      uploaded: uploaded ?? false,
     );
   }
 }
