@@ -76,6 +76,17 @@ class BeatFragmentAdded extends BeatCreationEvent {
   String toString() => 'BeatFragmentAdded';
 }
 
+class BeatFragmentDeleted extends BeatCreationEvent {
+  final int index;
+
+  BeatFragmentDeleted({
+    @required this.index,
+  }) : super([index]);
+
+  @override
+  String toString() => 'BeatFragmentDeleted';
+}
+
 class UploadBeatPressed extends BeatCreationEvent {
   UploadBeatPressed() : super([]);
 

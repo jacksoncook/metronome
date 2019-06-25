@@ -45,33 +45,38 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
           return Container(
               child: BlocProvider<BeatCreationBloc>(
             bloc: _beatCreationBloc,
-            child: ListView(
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                children: <Widget>[
-                  TextFormField(
-                      controller: _beatNameController,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.email),
-                        labelText: 'Beat Name',
-                      )),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.beat.beatFragments.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final BeatFragment beatFragment =
-                            state.beat.beatFragments[index];
-                        return beatFragment != null
-                            ? BeatCreationForm(
-                                beatFragment: state.beat.beatFragments[index],
-                                index: index,
-                              )
-                            : null;
-                      }),
-                  BeatCreationButton(
-                    onPressed: _onUploadBeat,
-                  ),
-                ]),
+            child: ListView(shrinkWrap: true, children: <Widget>[
+              TextFormField(
+                  controller: _beatNameController,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.email),
+                    labelText: 'Beat Name',
+                  )),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: PageScrollPhysics(),
+                  itemCount: state.beat.beatFragments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final BeatFragment beatFragment =
+                        state.beat.beatFragments[index];
+                    return beatFragment != null
+                        ? Dismissible(
+                            key: ObjectKey(beatFragment),
+                            onDismissed: (direction) {
+                              _onDeleteBeat(index);
+                            },
+                            child: BeatCreationForm(
+                              beatFragment: state.beat.beatFragments[index],
+                              index: index,
+                            ),
+                            background: Container(color: Colors.red),
+                          )
+                        : null;
+                  }),
+              BeatCreationButton(
+                onPressed: _onUploadBeat,
+              ),
+            ]),
           ));
         },
       ),
@@ -87,6 +92,14 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
   void _onUploadBeat() {
     _beatCreationBloc.dispatch(
       UploadBeatPressed(),
+    );
+  }
+
+  void _onDeleteBeat(int index) {
+    _beatCreationBloc.dispatch(
+      BeatFragmentDeleted(
+        index: index,
+      ),
     );
   }
 

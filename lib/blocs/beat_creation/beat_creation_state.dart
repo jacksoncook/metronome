@@ -5,9 +5,13 @@ import 'package:meta/meta.dart';
 @immutable
 class BeatCreationState {
   final Beat beat;
+  BeatFragment deletedFragment;
+  int deletedFragmentIndex;
 
   BeatCreationState({
     @required this.beat,
+    @required this.deletedFragment,
+    @required this.deletedFragmentIndex,
   });
 
   factory BeatCreationState.initial() {
@@ -21,9 +25,12 @@ class BeatCreationState {
     ));
 
     return BeatCreationState(
-        beat: Beat(
-      beatName: "",
-      beatFragments: beatFragments,
-    ));
+      beat: Beat(
+        beatName: "",
+        beatFragments: beatFragments,
+      ),
+      deletedFragment: null,
+      deletedFragmentIndex: 0,
+    );
   }
 }

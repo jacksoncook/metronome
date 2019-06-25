@@ -47,6 +47,10 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         event.endingType,
         event.index,
       );
+    } else if (event is BeatFragmentDeleted) {
+      yield* _mapBeatFragmentDeletedToState(
+        event.index,
+      );
     }
   }
 
@@ -55,7 +59,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
   ) async* {
     Beat newBeat = currentState.beat;
     newBeat.beatName = beatName;
-    yield BeatCreationState(beat: newBeat);
+    yield BeatCreationState(
+      beat: newBeat,
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
+    );
   }
 
   Stream<BeatCreationState> _mapBpmChangedToState(
@@ -69,6 +77,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -85,6 +95,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -99,6 +111,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -113,6 +127,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -127,6 +143,8 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
         beatName: currentState.beat.beatName,
         beatFragments: newBeatFragments,
       ),
+      deletedFragment: currentState.deletedFragment,
+      deletedFragmentIndex: currentState.deletedFragmentIndex,
     );
   }
 
@@ -138,5 +156,23 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
     // } catch (_) {
     //   yield LoginState.failure();
     // }
+  }
+
+  Stream<BeatCreationState> _mapBeatFragmentDeletedToState(
+    int deletedFragmentIndex,
+  ) async* {
+    List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
+    print(newBeatFragments);
+    BeatFragment deletedFragment =
+        newBeatFragments.removeAt(deletedFragmentIndex);
+    print(newBeatFragments);
+    yield BeatCreationState(
+      beat: Beat(
+        beatName: currentState.beat.beatName,
+        beatFragments: newBeatFragments,
+      ),
+      deletedFragment: deletedFragment,
+      deletedFragmentIndex: deletedFragmentIndex,
+    );
   }
 }
