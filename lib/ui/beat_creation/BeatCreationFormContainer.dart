@@ -176,6 +176,7 @@ class _BeatCreationFormContainerState extends State<BeatCreationFormContainer> {
   }
 
   void _onUndoDelete() {
+    Scaffold.of(context).hideCurrentSnackBar();
     _beatCreationBloc.dispatch(
       UndoBeatFragmentDelete(),
     );

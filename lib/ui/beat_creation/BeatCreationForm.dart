@@ -70,9 +70,6 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                   keyboardType: TextInputType.number,
                   autovalidate: true,
                   autocorrect: false,
-                  // validator: (_) {
-                  //   return !state.isEmailValid ? 'Invalid Email' : null;
-                  // },
                 ),
                 TextFormField(
                   controller: _measuresController,
@@ -83,9 +80,6 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                   keyboardType: TextInputType.number,
                   autovalidate: true,
                   autocorrect: false,
-                  // validator: (_) {
-                  //   return !state.isPasswordValid ? 'Invalid Password' : null;
-                  // },
                 ),
                 TextFormField(
                   controller: _timeSignatureController,
@@ -95,9 +89,6 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                   ),
                   autovalidate: true,
                   autocorrect: false,
-                  // validator: (_) {
-                  //   return !state.isPasswordValid ? 'Invalid Password' : null;
-                  // },
                 ),
                 TextFormField(
                   controller: _endingTypeController,
@@ -107,9 +98,6 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                   ),
                   autovalidate: true,
                   autocorrect: false,
-                  // validator: (_) {
-                  //   return !state.isPasswordValid ? 'Invalid Password' : null;
-                  // },
                 ),
               ],
             ),
