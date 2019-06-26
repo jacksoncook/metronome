@@ -53,6 +53,12 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
       );
     } else if (event is UndoBeatFragmentDelete) {
       yield* _mapUndoBeatFragmentDeleteToState();
+    } else if (event is SubdivisionVolumeChanged) {
+      yield* _mapSubdivisionVolumeChangedToState(
+        event.volume,
+        event.subdivision,
+        event.index,
+      );
     }
   }
 
@@ -87,6 +93,11 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
       measures: 40,
       timeSignature: "4/4",
       endingType: "END",
+      accentVolume: 0.70,
+      quarterNoteVolume: 0.0,
+      eighthNoteVolume: 0.0,
+      sixteenthNoteVolume: 0.0,
+      tripletVolume: 0.0,
     ));
     yield currentState.update(
         beat: Beat(
@@ -171,6 +182,24 @@ class BeatCreationBloc extends Bloc<BeatCreationEvent, BeatCreationState> {
     newBeatFragments.insert(
       currentState.deletedFragmentIndex,
       currentState.deletedFragment,
+    );
+    yield currentState.update(
+      beat: Beat(
+        beatName: currentState.beat.beatName,
+        beatFragments: newBeatFragments,
+      ),
+    );
+  }
+
+  Stream<BeatCreationState> _mapSubdivisionVolumeChangedToState(
+    double volume,
+    Subdivision subdivision,
+    int index,
+  ) async* {
+    List<BeatFragment> newBeatFragments = currentState.beat.beatFragments;
+    newBeatFragments[index].setVolume(
+      subdivision,
+      volume,
     );
     yield currentState.update(
       beat: Beat(

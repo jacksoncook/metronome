@@ -27,6 +27,11 @@ class BeatCreationState {
       measures: 40,
       timeSignature: "4/4",
       endingType: "END",
+      accentVolume: 0.70,
+      quarterNoteVolume: 0.0,
+      eighthNoteVolume: 0.0,
+      sixteenthNoteVolume: 0.0,
+      tripletVolume: 0.0,
     ));
 
     return BeatCreationState(

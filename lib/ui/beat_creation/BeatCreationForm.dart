@@ -26,6 +26,8 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
   TextEditingController _measuresController;
   TextEditingController _timeSignatureController;
   TextEditingController _endingTypeController;
+  Subdivision _selectedSubdivision;
+  double _currentVolume;
 
   BeatCreationBloc _beatCreationBloc;
 
@@ -35,6 +37,8 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
   @override
   void initState() {
     super.initState();
+    _selectedSubdivision = Subdivision.Accent;
+    _currentVolume = _beatFragment.getVolume(_selectedSubdivision);
     _beatCreationBloc = BlocProvider.of<BeatCreationBloc>(context);
     _bpmController = TextEditingController(text: _beatFragment.bpm.toString());
     _bpmController.addListener(_onBpmChanged);
@@ -99,6 +103,45 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
                   autovalidate: true,
                   autocorrect: false,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Radio(
+                      value: Subdivision.Accent,
+                      groupValue: _selectedSubdivision,
+                      onChanged: _onSubdivisionChanged,
+                    ),
+                    Radio(
+                      value: Subdivision.Quarter,
+                      groupValue: _selectedSubdivision,
+                      onChanged: _onSubdivisionChanged,
+                    ),
+                    Radio(
+                      value: Subdivision.Eighth,
+                      groupValue: _selectedSubdivision,
+                      onChanged: _onSubdivisionChanged,
+                    ),
+                    Radio(
+                      value: Subdivision.Sixteenth,
+                      groupValue: _selectedSubdivision,
+                      onChanged: _onSubdivisionChanged,
+                    ),
+                    Radio(
+                      value: Subdivision.Triplet,
+                      groupValue: _selectedSubdivision,
+                      onChanged: _onSubdivisionChanged,
+                    ),
+                  ],
+                ),
+                Slider(
+                  min: 0.0,
+                  max: 1.0,
+                  activeColor: Colors.purple,
+                  inactiveColor: Colors.purple.withOpacity(0.6),
+                  label: "Volume",
+                  value: _currentVolume,
+                  onChanged: _onSubdivisionVolumeChange,
+                )
               ],
             ),
           ),
@@ -114,6 +157,24 @@ class _BeatCreationFormState extends State<BeatCreationForm> {
     _timeSignatureController.dispose();
     _endingTypeController.dispose();
     super.dispose();
+  }
+
+  void _onSubdivisionChanged(Subdivision subdivision) {
+    setState(() {
+      _selectedSubdivision = subdivision;
+      _currentVolume = _beatFragment.getVolume(_selectedSubdivision);
+    });
+  }
+
+  void _onSubdivisionVolumeChange(double newValue) {
+    _currentVolume = newValue;
+    _beatCreationBloc.dispatch(
+      SubdivisionVolumeChanged(
+        volume: _currentVolume,
+        subdivision: _selectedSubdivision,
+        index: _index,
+      ),
+    );
   }
 
   void _onBpmChanged() {

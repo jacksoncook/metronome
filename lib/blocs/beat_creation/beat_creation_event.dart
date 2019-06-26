@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:metronome/models/models.dart';
 
 @immutable
 abstract class BeatCreationEvent extends Equatable {
@@ -92,6 +93,21 @@ class UndoBeatFragmentDelete extends BeatCreationEvent {
 
   @override
   String toString() => 'UndoBeatFragmentDelete';
+}
+
+class SubdivisionVolumeChanged extends BeatCreationEvent {
+  final double volume;
+  final Subdivision subdivision;
+  final int index;
+
+  SubdivisionVolumeChanged({
+    @required this.volume,
+    @required this.subdivision,
+    @required this.index,
+  }) : super([volume, subdivision, index]);
+
+  @override
+  String toString() => 'SubdivisionVolumeChanged';
 }
 
 class UploadBeatPressed extends BeatCreationEvent {
